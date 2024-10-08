@@ -1,3 +1,4 @@
+
 package com.example.amzinlibapp.model;
 
 import jakarta.persistence.Entity;

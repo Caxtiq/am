@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:library_app/models/book.dart';
 import 'package:library_app/screens/book_screen.dart';
 import 'package:library_app/screens/borrow_screen.dart';
 import 'package:library_app/screens/chat_screen.dart';
@@ -36,14 +37,14 @@ class HomeScreen extends StatelessWidget {
               leading: Icon(Icons.book),
               title: Text('Book'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookScreen(token: '',)));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookScreen()));
               },
             ),
             ListTile(
               leading: Icon(Icons.assignment_return),
               title: Text('Borrow'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BorrowScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BorrowScreen(book: Book(title: 'title', author: 'author', status: 'available'),)));
               },
             ),
             ListTile(
