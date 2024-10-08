@@ -2,7 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:library_app/models/user.dart';
+import 'package:library_app/models/user_data.dart';
 import 'package:library_app/screens/login_screen.dart';
+
 
 class RegisterScreen extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -32,10 +35,27 @@ class RegisterScreen extends StatelessWidget {
     );
 
     if (response.statusCode == 200 || response.statusCode == 302) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration successful!')),
-      );
-      Navigator.of(context).pushReplacementNamed('/login');
+      final responseData = json.decode(response.body);
+      if (responseData != null && responseData is Map<String, dynamic>) {
+        final int id = responseData['id'] ?? 0;
+        final String role = responseData['role'] ?? 'user';
+        final User registeredUser = User(id: id, username: username, email: email, role: role);
+
+        UserData().updateUser(registeredUser, '');
+        print('Username in UserData: ${UserData().user?.username}');
+        print('Token in UserData: ${UserData().token}');
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Registration successful!')),
+        );
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Invalid response data')),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Registration failed. Please try again.')),

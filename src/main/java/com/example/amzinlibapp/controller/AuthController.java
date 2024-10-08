@@ -28,13 +28,13 @@ public class AuthController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> registerUser(@RequestBody User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
-            return ResponseEntity.badRequest().body("Username is already taken!");
+            return ResponseEntity.badRequest().body(Map.of("message", "Username is already taken!"));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return ResponseEntity.ok("User registered successfully!");
+        return ResponseEntity.ok(Map.of("message", "User registered successfully!", "id", String.valueOf(user.getId())));
     }
 
     @PostMapping("/login")
