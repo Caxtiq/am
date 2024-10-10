@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:library_app/models/user.dart';
+import 'package:library_app/models/user_data.dart';
 
 import 'home_screen.dart';
 
@@ -30,6 +32,14 @@ class _LoginScreenState extends State<LoginScreen> {
       final responseData = json.decode(response.body);
       final String token = responseData['token'];
       final String username = _usernameController.text;
+
+      final userData = json.decode((await http.get(
+        Uri.parse('http://localhost:8080/api/users/$username'),
+        headers: {'Authentication': 'Bearer $token'},
+      ))
+          .body);
+
+      UserData().updateUser(User.fromJson(userData), token);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(

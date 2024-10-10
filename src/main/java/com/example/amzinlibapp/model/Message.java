@@ -27,15 +27,15 @@ public class Message {
     private User receiver;
 
     private String content;
-    private LocalDateTime timestamp;
+    private Long timestamp;
 
     public Message() {}
 
-    public Message(User sender, User receiver, String content, LocalDateTime timestamp) {
+    public Message(User sender, User receiver, String content) {
         this.sender = sender;
         this.receiver = receiver;
         this.content = content;
-        this.timestamp = timestamp;
+        this.timestamp = System.currentTimeMillis();
     }
 
     public Long getId() {
@@ -70,11 +70,11 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:library_app/models/book.dart';
+import 'package:library_app/models/user_data.dart';
 import 'information_screen.dart';
 
 class BookScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _BookScreenState extends State<BookScreen> {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/books'),
         headers: {
+          'Authentication': 'Bearer ${UserData().token}',
           'Content-Type': 'application/json',
         },
       );
@@ -41,7 +43,8 @@ class _BookScreenState extends State<BookScreen> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load books: ${response.statusCode}')),
+          SnackBar(
+              content: Text('Failed to load books: ${response.statusCode}')),
         );
       }
     } catch (e) {
@@ -56,12 +59,14 @@ class _BookScreenState extends State<BookScreen> {
     setState(() {
       filteredBooks = books.where((book) {
         final matchesQuery = (book.title ?? '').toLowerCase().contains(query) ||
-                            (book.author ?? '').toLowerCase().contains(query);
+            (book.author ?? '').toLowerCase().contains(query);
         final matchesFilter = filterOption == 'All' ||
-                             (filterOption == 'Title' && (book.title ?? '').toLowerCase().contains(query)) ||
-                             (filterOption == 'Author' && (book.author ?? '').toLowerCase().contains(query));
+            (filterOption == 'Title' &&
+                (book.title ?? '').toLowerCase().contains(query)) ||
+            (filterOption == 'Author' &&
+                (book.author ?? '').toLowerCase().contains(query));
         final matchesStatus = statusOption == 'All' ||
-                             (book.status ?? '').toLowerCase() == statusOption.toLowerCase();
+            (book.status ?? '').toLowerCase() == statusOption.toLowerCase();
         return matchesQuery && matchesFilter && matchesStatus;
       }).toList();
       sortBooks();
@@ -174,7 +179,8 @@ class _BookScreenState extends State<BookScreen> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => InformationScreen(book: book),
+                              builder: (context) =>
+                                  InformationScreen(book: book),
                             ),
                           );
                         },
@@ -184,7 +190,8 @@ class _BookScreenState extends State<BookScreen> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0, vertical: 4.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -196,14 +203,20 @@ class _BookScreenState extends State<BookScreen> {
                                   ),
                                 ),
                                 SizedBox(height: 4),
-                                Text('Author: ${book.author ?? 'Unknown Author'}'),
+                                Text(
+                                    'Author: ${book.author ?? 'Unknown Author'}'),
                                 SizedBox(height: 4),
-                                Text('Status: ${book.status ?? 'Unknown Status'}'),
+                                Text(
+                                    'Status: ${book.status ?? 'Unknown Status'}'),
                                 Align(
                                   alignment: Alignment.bottomRight,
                                   child: Icon(
-                                    book.status == 'Available' ? Icons.check_circle : Icons.cancel,
-                                    color: book.status == 'Available' ? Colors.green : Colors.red,
+                                    book.status == 'Available'
+                                        ? Icons.check_circle
+                                        : Icons.cancel,
+                                    color: book.status == 'Available'
+                                        ? Colors.green
+                                        : Colors.red,
                                   ),
                                 ),
                               ],
@@ -219,4 +232,3 @@ class _BookScreenState extends State<BookScreen> {
     );
   }
 }
-

@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:library_app/models/message.dart';
-
-
+import 'package:library_app/models/user_data.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -16,14 +15,14 @@ class _ChatScreenState extends State<ChatScreen> {
   final String apiUrl = 'http://127.0.0.1:8080/api/users';
   final String messagesApiUrl = 'http://127.0.0.1:8080/api/messages';
   List<Message> messages = [];
-  String? currentUser = '';
+  String? currentUser = 'http://127.0.0.1:8080/api/currentUser';
   String? selectedUser;
 
   @override
   void initState() {
     super.initState();
 
-    currentUser = 'w';
+    currentUser = 'http://127.0.0.1:8080/api/currentUser';
     super.initState();
     fetchUsers();
     fetchMessages();
@@ -31,7 +30,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> fetchUsers() async {
     try {
-      final response = await http.get(Uri.parse(apiUrl));
+      final response = await http.get(Uri.parse(apiUrl), headers: {
+        'Authentication': 'Bearer ${UserData().token}',
+      });
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -39,7 +40,8 @@ class _ChatScreenState extends State<ChatScreen> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to load users: ${response.statusCode}')),
+          SnackBar(
+              content: Text('Failed to load users: ${response.statusCode}')),
         );
       }
     } catch (e) {
@@ -51,7 +53,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future<void> fetchMessages() async {
     try {
-      final response = await http.get(Uri.parse(messagesApiUrl));
+      final response = await http.get(Uri.parse(messagesApiUrl), headers: {
+        'Authentication': 'Bearer ${UserData().token}',
+      });
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         setState(() {
@@ -120,11 +124,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Please enter a valid username to connect')),
+                  SnackBar(
+                      content:
+                          Text('Please enter a valid username to connect')),
                 );
               }
             },
-          ),],
+          ),
+        ],
         backgroundColor: Colors.pinkAccent,
       ),
       body: Column(
@@ -136,8 +143,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 final Message message = messages[index];
                 return ListTile(
                   title: Text('From: ${message.senderId}'),
-                  subtitle: Text(
-                      'To: ${message.receiverId}\n${message.content}'),
+                  subtitle:
+                      Text('To: ${message.receiverId}\n${message.content}'),
                 );
               },
             ),
@@ -162,17 +169,19 @@ class _ChatScreenState extends State<ChatScreen> {
                     if (_messageController.text.isNotEmpty &&
                         selectedUser != null) {
                       final newMessage = Message(
-                        id: 0, 
-                        senderId: int.parse(currentUser!),
-                        receiverId: users.indexOf(selectedUser!) + 1 ,
+                        id: UserData().user!.id,
+                        senderId: UserData().user!.username,
+                        receiverId: users.indexOf(selectedUser!) + 1,
                         content: _messageController.text,
-                        timestamp: DateTime.now().toString(),
                       );
 
                       try {
                         final response = await http.post(
                           Uri.parse(messagesApiUrl),
-                          headers: {'Content-Type': 'application/json'},
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authentication': 'Bearer ${UserData().token}',
+                          },
                           body: json.encode(newMessage.toJson()),
                         );
                         if (response.statusCode == 200 ||
@@ -182,10 +191,15 @@ class _ChatScreenState extends State<ChatScreen> {
                           });
                           _messageController.clear();
                         } else {
+                          var res =
+                              'Failed to send message: ${response.statusCode}: ${response.body}';
+                          print(res);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text(
-                                    'Failed to send message: ${response.statusCode}')),
+                              content: Text(
+                                res,
+                              ),
+                            ),
                           );
                         }
                       } catch (e) {

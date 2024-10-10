@@ -50,11 +50,10 @@ class _BorrowScreenState extends State<BorrowScreen> {
                     subtitle: Text('Author: ${book.author ?? 'Unknown Author'}'),
                     trailing: ElevatedButton(
                       onPressed: () {
-                        setState(() {
-                          borrowedBooks.removeAt(index);
-                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content:Text("Your book will be approved by admin at most three days, from Monday to Friday, exception for weekends and holidays"),),);
                       },
-                      child: Text('Return'),
+                      child: Text('Pending'),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.pinkAccent,
                       ),
