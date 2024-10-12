@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,12 +24,25 @@ public class UserController {
     private UserRepository userRepository;
 
     @GetMapping()
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     @GetMapping("/{username}")
+    // @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/admin/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<User> getAdminUserByUsername(@PathVariable String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
             return ResponseEntity.ok(user.get());

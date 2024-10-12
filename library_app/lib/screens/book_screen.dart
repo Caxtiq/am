@@ -30,7 +30,7 @@ class _BookScreenState extends State<BookScreen> {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/books'),
         headers: {
-          'Authentication': 'Bearer ${UserData().token}',
+          'Authorization': 'Bearer ${UserData().token}',
           'Content-Type': 'application/json',
         },
       );

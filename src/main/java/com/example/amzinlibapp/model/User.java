@@ -1,4 +1,3 @@
-
 package com.example.amzinlibapp.model;
 
 import jakarta.persistence.Entity;
@@ -17,15 +16,21 @@ public class User {
     private String username;
     private String password;
     private String email;
-    private String role = "USER";
+    private Boolean isAdmin;
 
-    public User() {}
+    public User() {
+        this.isAdmin = false;
+    }
 
-    public User(String username, String password, String email, String role) {
+    public User(String username, String password, String email) {
+        this(username, password, email, false);
+    }
+
+    public User(String username, String password, String email, Boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.role = role;
+        this.isAdmin = isAdmin;
     }
 
     public Long getId() {
@@ -60,11 +65,11 @@ public class User {
         this.email = email;
     }
 
-    public String getRole() {
-        return role;
+    public Boolean getIsAdmin() {
+        return isAdmin;
     }
-
-    public void setRole(String role) {
-        this.role = role;
+    
+    public void setIsAdmin(Boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 }

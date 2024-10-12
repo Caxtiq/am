@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       final userData = json.decode((await http.get(
         Uri.parse('http://localhost:8080/api/users/$username'),
-        headers: {'Authentication': 'Bearer $token'},
+        headers: {'Authorization': 'Bearer $token'},
       ))
           .body);
 

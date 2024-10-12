@@ -31,7 +31,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> fetchUsers() async {
     try {
       final response = await http.get(Uri.parse(apiUrl), headers: {
-        'Authentication': 'Bearer ${UserData().token}',
+        'Authorization': 'Bearer ${UserData().token}',
       });
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
@@ -54,7 +54,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> fetchMessages() async {
     try {
       final response = await http.get(Uri.parse(messagesApiUrl), headers: {
-        'Authentication': 'Bearer ${UserData().token}',
+        'Authorization': 'Bearer ${UserData().token}',
       });
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
@@ -180,7 +180,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           Uri.parse(messagesApiUrl),
                           headers: {
                             'Content-Type': 'application/json',
-                            'Authentication': 'Bearer ${UserData().token}',
+                            'Authorization': 'Bearer ${UserData().token}',
                           },
                           body: json.encode(newMessage.toJson()),
                         );
