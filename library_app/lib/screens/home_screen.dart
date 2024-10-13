@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/models/book.dart';
+import 'package:library_app/models/user.dart';
 import 'package:library_app/screens/book_screen.dart';
 import 'package:library_app/screens/borrow_screen.dart';
 import 'package:library_app/screens/chat_screen.dart';
@@ -7,8 +8,10 @@ import 'package:library_app/screens/setting_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   final String username;
+  final User currentUser;
+  final User admin;
 
-  HomeScreen({required this.username});
+  HomeScreen({required this.username, required this.currentUser, required this.admin});
 
   @override
   Widget build(BuildContext context) {
@@ -37,28 +40,42 @@ class HomeScreen extends StatelessWidget {
               leading: Icon(Icons.book),
               title: Text('Book'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BookScreen()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => BookScreen(currentUser: currentUser,)));
               },
             ),
             ListTile(
               leading: Icon(Icons.assignment_return),
               title: Text('Borrow'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => BorrowScreen(book: Book(title: 'title', author: 'author', status: 'available'),)));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => BorrowScreen(
+                    book: Book(
+                        title: 'title', author: 'author', status: 'available'),
+                    admin: User(
+                        id: 10,
+                        username: 'admin',
+                        email: 'admin@example.com',
+                        isAdmin: true),
+                    currentUser: currentUser,
+                  ),
+                ));
               },
             ),
             ListTile(
               leading: Icon(Icons.chat),
               title: Text('Chat'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChatScreen()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => ChatScreen()));
               },
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('Setting'),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingScreen()));
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => SettingScreen()));
               },
             ),
           ],

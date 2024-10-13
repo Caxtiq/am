@@ -3,10 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:library_app/models/book.dart';
+import 'package:library_app/models/user.dart';
 import 'package:library_app/models/user_data.dart';
+
 import 'information_screen.dart';
 
 class BookScreen extends StatefulWidget {
+   final User currentUser;
+   BookScreen({required this.currentUser}); 
   @override
   _BookScreenState createState() => _BookScreenState();
 }
@@ -180,7 +184,7 @@ class _BookScreenState extends State<BookScreen> {
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) =>
-                                  InformationScreen(book: book),
+                                  InformationScreen(book: book, currentUser: widget.currentUser),
                             ),
                           );
                         },

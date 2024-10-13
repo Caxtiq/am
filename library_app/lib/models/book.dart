@@ -1,5 +1,3 @@
-
-
 class Book {
   final String title;
   final String author;
@@ -12,6 +10,17 @@ class Book {
       title: json['title'],
       author: json['author'],
       status: json['status'],
+    );
+  }
+  Book copyWith({
+    String? title,
+    String? author,
+    String? status,
+  }) {
+    return Book(
+      title: title ?? this.title,
+      author: author ?? this.author,
+      status: status ?? this.status,
     );
   }
 }

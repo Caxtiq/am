@@ -15,17 +15,13 @@ import io.jsonwebtoken.UnsupportedJwtException;
 
 @Component
 public class JwtTokenProvider {
-    // Đoạn JWT_SECRET này là bí mật, chỉ có phía server biết
     private final String JWT_SECRET = "random";
 
-    // Thời gian có hiệu lực của chuỗi jwt
     private final long JWT_EXPIRATION = 604800000L;
 
-    // Tạo ra jwt từ thông tin user
     public String generateToken(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
-        // Tạo chuỗi json web token từ id của user.
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .setIssuedAt(now)
@@ -34,7 +30,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    // Lấy thông tin user từ jwt
     public String getUsernameFromJWT(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(JWT_SECRET)

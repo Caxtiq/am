@@ -18,7 +18,7 @@ public class UserDetails implements org.springframework.security.core.userdetail
         Boolean isAdmin = user.getIsAdmin();
         if (isAdmin == null)
             isAdmin = false;
-        return Collections.singletonList(new SimpleGrantedAuthority(isAdmin ? "ADMIN" : "USER"));
+        return Collections.singletonList(new SimpleGrantedAuthority(isAdmin ? "ROLE_ADMIN" : "ROLE_USER"));
     }
 
     public User getUser() {

@@ -34,22 +34,25 @@ class _LoginScreenState extends State<LoginScreen> {
       final String username = _usernameController.text;
 
       final userData = json.decode((await http.get(
-        Uri.parse('http://localhost:8080/api/users/$username'),
-        headers: {'Authorization': 'Bearer $token'},
-      ))
+              Uri.parse('http://localhost:8080/api/users/currentUser'),
+              headers: {'Authorization': 'Bearer $token'},
+            ))
           .body);
 
-      UserData().updateUser(User.fromJson(userData), token);
+      User currentUser = User.fromJson(userData); 
+      UserData().updateUser(currentUser, token);
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => HomeScreen(username: username),
+          builder: (context) =>
+              HomeScreen(username: username, currentUser: currentUser,admin:User(id: 1, username: 'assmin', email: 'assmin', isAdmin: true) ),
         ),
       );
     } else {
       final responseData = json.decode(response.body);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(responseData['message'] ?? 'Login failed')),
+        SnackBar(
+            content: Text(responseData['message'] ?? 'Login failed')),
       );
     }
   }

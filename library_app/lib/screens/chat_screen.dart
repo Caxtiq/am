@@ -24,7 +24,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     currentUser = 'http://127.0.0.1:8080/api/currentUser';
     super.initState();
-    fetchUsers();
+    // fetchUsers();
     fetchMessages();
   }
 
@@ -118,17 +118,24 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(Icons.connect_without_contact, color: Colors.white),
             onPressed: () {
-              if (selectedUser != null && users.contains(selectedUser)) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Connected to $selectedUser')),
-                );
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      content:
-                          Text('Please enter a valid username to connect')),
-                );
-              }
+              http.get(
+                Uri.parse(
+                  "http://127.0.0.1:8080/api/users/exists/$selectedUser",
+                ),
+                headers: {'Authorization': 'Bearer ${UserData().token}'},
+              ).then((response) {
+                if (selectedUser != null && response.body == "true") {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Connected to $selectedUser')),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                        content:
+                            Text('Please enter a valid username to connect')),
+                  );
+                }
+              });
             },
           ),
         ],

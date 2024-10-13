@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/models/book.dart';
+import 'package:library_app/models/user.dart';
 import 'package:library_app/screens/borrow_screen.dart';
 
 class InformationScreen extends StatelessWidget {
   final Book book;
+  final User currentUser; 
 
-  InformationScreen({required this.book});
+  InformationScreen({required this.book, required this.currentUser}); 
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +50,12 @@ class InformationScreen extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => BorrowScreen(book: book)),
-                      
+                        builder: (context) => BorrowScreen(
+                          book: book, 
+                          admin: User(id: 10, username: 'admin', email: 'admin@example.com', isAdmin: true),
+                          currentUser: currentUser, 
+                        ),
+                      ),
                     );
                   },
                   child: Text('Borrow Now'),
