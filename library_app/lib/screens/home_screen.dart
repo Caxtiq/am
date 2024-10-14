@@ -9,7 +9,7 @@ import 'package:library_app/screens/setting_screen.dart';
 class HomeScreen extends StatefulWidget {
   final User currentUser;
 
-  const HomeScreen({Key? key, required this.currentUser}) : super(key: key);
+  const HomeScreen({super.key, required this.currentUser});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     Shadow(
                       blurRadius: 10.0,
                       color: Colors.black.withOpacity(0.3),
-                      offset: Offset(2.0, 2.0),
+                      offset: const Offset(2.0, 2.0),
                     ),
                   ],
                 ),
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.menu, color: Colors.white),
+                icon: const Icon(Icons.menu, color: Colors.white),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
                 },
@@ -119,20 +119,20 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           backgroundColor: Colors.white,
                           child: Text(
                             widget.currentUser.username[0].toUpperCase(),
-                            style: TextStyle(fontSize: 48, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
+                            style: const TextStyle(fontSize: 48, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Center(
                     child: Text(
                       widget.currentUser.username,
-                      style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.pinkAccent),
+                      style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.pinkAccent),
                     ),
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   Text(
                     'Quick Actions',
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -140,14 +140,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           fontWeight: FontWeight.bold,
                         ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   AnimationLimiter(
                     child: GridView.count(
                       shrinkWrap: true,
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       children: List.generate(
                         4,
                         (index) => AnimationConfiguration.staggeredGrid(
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   Widget _buildQuickActionCard(BuildContext context, int index) {
     final List<Map<String, dynamic>> actions = [
       {'icon': Icons.book, 'title': 'Books', 'screen': BookScreen(currentUser: widget.currentUser)},
-      {'icon': Icons.assignment_return, 'title': 'Borrow', 'screen': BorrowScreen()},
+      {'icon': Icons.assignment_return, 'title': 'Borrow', 'screen': const BorrowScreen()},
       {'icon': Icons.chat, 'title': 'Chat', 'screen': const ChatScreen()},
       {'icon': Icons.settings, 'title': 'Settings', 'screen': const SettingScreen()},
     ];
@@ -202,10 +202,10 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(actions[index]['icon'], size: 48, color: Colors.white),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 actions[index]['title'],
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ],
           ),
@@ -239,13 +239,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     backgroundColor: Colors.white,
                     child: Text(
                       widget.currentUser.username[0].toUpperCase(),
-                      style: TextStyle(fontSize: 32, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 32, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Text(
                     'Hello, ${widget.currentUser.username}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -255,7 +255,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
             ),
             _buildDrawerItem(context, Icons.book, 'Book', BookScreen(currentUser: widget.currentUser)),
-            _buildDrawerItem(context, Icons.assignment_return, 'Borrow', BorrowScreen()),
+            _buildDrawerItem(context, Icons.assignment_return, 'Borrow', const BorrowScreen()),
             _buildDrawerItem(context, Icons.chat, 'Chat', const ChatScreen()),
             _buildDrawerItem(context, Icons.settings, 'Setting', const SettingScreen()),
           ],
@@ -267,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   Widget _buildDrawerItem(BuildContext context, IconData icon, String title, Widget screen) {
     return ListTile(
       leading: Icon(icon, color: Colors.white),
-      title: Text(title, style: TextStyle(color: Colors.white, fontSize: 18)),
+      title: Text(title, style: const TextStyle(color: Colors.white, fontSize: 18)),
       onTap: () {
         Navigator.pop(context); 
         Navigator.of(context).push(MaterialPageRoute(builder: (context) => screen));

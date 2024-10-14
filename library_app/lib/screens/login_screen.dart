@@ -175,13 +175,13 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.library_books,
                           size: 80,
                           color: Colors.white,
                         ),
-                        SizedBox(height: 24),
-                        Text(
+                        const SizedBox(height: 24),
+                        const Text(
                           'Welcome Back',
                           style: TextStyle(
                             fontSize: 32,
@@ -190,8 +190,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 8),
-                        Text(
+                        const SizedBox(height: 8),
+                        const Text(
                           'Sign in to continue',
                           style: TextStyle(
                             fontSize: 16,
@@ -199,70 +199,70 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        SizedBox(height: 48),
+                        const SizedBox(height: 48),
                         TextFormField(
                           controller: _usernameController,
                           decoration: InputDecoration(
                             labelText: 'Username',
-                            prefixIcon: Icon(Icons.person, color: Colors.white70),
-                            labelStyle: TextStyle(color: Colors.white70),
+                            prefixIcon: const Icon(Icons.person, color: Colors.white70),
+                            labelStyle: const TextStyle(color: Colors.white70),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white70),
+                              borderSide: const BorderSide(color: Colors.white70),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: const BorderSide(color: Colors.white),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         TextFormField(
                           controller: _passwordController,
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            prefixIcon: Icon(Icons.lock, color: Colors.white70),
-                            labelStyle: TextStyle(color: Colors.white70),
+                            prefixIcon: const Icon(Icons.lock, color: Colors.white70),
+                            labelStyle: const TextStyle(color: Colors.white70),
                             enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white70),
+                              borderSide: const BorderSide(color: Colors.white70),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
+                              borderSide: const BorderSide(color: Colors.white),
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
                           obscureText: true,
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
-                        SizedBox(height: 24),
+                        const SizedBox(height: 24),
                         ElevatedButton(
                           onPressed: _isLoading ? null : login,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            child: _isLoading
-                                ? CircularProgressIndicator(color: Colors.pink)
-                                : Text(
-                                    'Login',
-                                    style: TextStyle(fontSize: 18, color: Colors.pink),
-                                  ),
-                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 16.0),
+                            child: _isLoading
+                                ? const CircularProgressIndicator(color: Colors.pink)
+                                : const Text(
+                                    'Login',
+                                    style: TextStyle(fontSize: 18, color: Colors.pink),
+                                  ),
+                          ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         TextButton(
                           onPressed: () {
                             Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) => RegisterScreen()),
+                              MaterialPageRoute(builder: (context) => const RegisterScreen()),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Don\'t have an account? Register',
                             style: TextStyle(color: Colors.white),
                           ),

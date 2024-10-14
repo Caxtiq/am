@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:library_app/models/book.dart';
 import 'package:library_app/models/borrow.dart';
-import 'package:library_app/models/user.dart';
 import 'package:library_app/providers/storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -185,7 +184,7 @@ class _BorrowScreenState extends State<BorrowScreen> {
     } else {
       return Text(
         ['Pending', 'Approved', 'Denied'][borrow.state],
-        style: TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
+        style: const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
       );
     }
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:library_app/models/book.dart';
 import 'package:library_app/models/user.dart';
+import 'package:library_app/providers/storage.dart';
+import 'package:library_app/screens/book_editor.dart';
 import 'package:library_app/screens/borrow_screen.dart';
 
 class InformationScreen extends StatelessWidget {
@@ -44,24 +46,29 @@ class InformationScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 32),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
+            Row(children: [
+              Expanded(
+                child: ElevatedButton(
                   onPressed: () {
                     BorrowScreen.borrow(book);
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => BorrowScreen(),
+                        builder: (context) => const BorrowScreen(),
                       ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pinkAccent,
                   ),
-                  child: const Text('Borrow Now'),
+                  child: const Text(
+                    'Borrow Now',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-                ElevatedButton(
+              ),
+              const SizedBox.square(dimension: 16),
+              Expanded(
+                child: ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Added to Borrow Cart')),
@@ -70,10 +77,41 @@ class InformationScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                   ),
-                  child: const Text('Add to Borrow Cart'),
+                  child: const Text(
+                    'Add to Borrow Cart',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ]),
+            if (Storage().user.isAdmin) ...[
+              const SizedBox.square(dimension: 16),
+              Row(children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => BookEditor(book: book),
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.yellowAccent,
+                    ),
+                    child: const Text('Edit'),
+                  ),
+                ),
+                const SizedBox.square(dimension: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent,
+                    ),
+                    child: const Text('Delete'),
+                  ),
+                ),
+              ]),
+            ],
           ],
         ),
       ),

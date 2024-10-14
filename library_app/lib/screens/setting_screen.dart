@@ -7,7 +7,7 @@ import 'package:library_app/screens/privacy_screen.dart';
 import 'package:library_app/screens/profile_screen.dart';
 
 class SettingScreen extends StatefulWidget {
-  const SettingScreen({Key? key}) : super(key: key);
+  const SettingScreen({super.key});
 
   @override
   _SettingScreenState createState() => _SettingScreenState();
@@ -33,7 +33,7 @@ class _SettingScreenState extends State<SettingScreen> {
                   colors: [Colors.pink[300]!, Colors.pink[500]!],
                 ),
               ),
-              child: FlexibleSpaceBar(
+              child: const FlexibleSpaceBar(
                 centerTitle: true,
                 title: Text('Settings',
                     style: TextStyle(
@@ -53,7 +53,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     icon: Icons.person,
                     title: 'Profile',
                     subtitle: 'View and edit your profile information',
-                    onTap: () => _navigateTo(ProfileScreen()),
+                    onTap: () => _navigateTo(const ProfileScreen()),
                   ),
                   _buildSettingCard(
                     icon: Icons.notifications,
@@ -65,20 +65,20 @@ class _SettingScreenState extends State<SettingScreen> {
                     icon: Icons.lock,
                     title: 'Privacy',
                     subtitle: 'Adjust your privacy settings',
-                    onTap: () => _navigateTo(PrivacyScreen()),
+                    onTap: () => _navigateTo(const PrivacyScreen()),
                   ),
                   _buildSettingCard(
                     icon: Icons.help,
                     title: 'Help & Support',
                     subtitle: 'Get help and support',
-                    onTap: () => _navigateTo(HelpSupportScreen()),
+                    onTap: () => _navigateTo(const HelpSupportScreen()),
                   ),
                   _buildThemeCard(),
                   _buildSettingCard(
                     icon: Icons.language,
                     title: 'Language',
                     subtitle: 'Change app language',
-                    onTap: () => _navigateTo(LanguageScreen()),
+                    onTap: () => _navigateTo(const LanguageScreen()),
                   ),
                   _buildLogoutCard(),
                 ],
@@ -98,13 +98,13 @@ class _SettingScreenState extends State<SettingScreen> {
   }) {
     return Card(
       elevation: 2,
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.pink[100],
           child: Icon(icon, color: Colors.pink[700]),
         ),
-        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
         subtitle: Text(subtitle),
         trailing: Icon(Icons.chevron_right, color: Colors.pink[300]),
         onTap: onTap,
@@ -115,14 +115,14 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget _buildThemeCard() {
     return Card(
       elevation: 2,
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: SwitchListTile(
         secondary: CircleAvatar(
           backgroundColor: Colors.pink[100],
           child: Icon(Icons.palette, color: Colors.pink[700]),
         ),
-        title: Text('Dark Mode', style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text('Toggle dark mode on/off'),
+        title: const Text('Dark Mode', style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: const Text('Toggle dark mode on/off'),
         value: isDarkMode,
         activeColor: Colors.pink[300],
         onChanged: (value) {
@@ -137,14 +137,14 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget _buildLogoutCard() {
     return Card(
       elevation: 2,
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Colors.pink[100],
           child: Icon(Icons.logout, color: Colors.pink[700]),
         ),
-        title: Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Text('Log out of your account'),
+        title: const Text('Logout', style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: const Text('Log out of your account'),
         trailing: Icon(Icons.chevron_right, color: Colors.pink[300]),
         onTap: _showLogoutDialog,
       ),
@@ -162,8 +162,8 @@ class _SettingScreenState extends State<SettingScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Confirm Logout'),
-        content: Text('Are you sure you want to log out?'),
+        title: const Text('Confirm Logout'),
+        content: const Text('Are you sure you want to log out?'),
         actions: [
           TextButton(
             onPressed: Navigator.of(context).pop,
@@ -173,15 +173,15 @@ class _SettingScreenState extends State<SettingScreen> {
             onPressed: () {
               Storage().deinitUser();
               Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (_) => LoginScreen()),
+                MaterialPageRoute(builder: (_) => const LoginScreen()),
                 (_) => false,
               );
             },
-            child: Text('Logout'),
             style: ElevatedButton.styleFrom(
               foregroundColor: Colors.white, 
               backgroundColor: Colors.pink[300],
             ),
+            child: const Text('Logout'),
           ),
         ],
       ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -39,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _saveChanges() {
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Profile updated successfully!'),
           backgroundColor: Colors.green,
         ),
@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         flexibleSpace: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -78,24 +78,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         radius: 60,
                         backgroundImage: _image != null
                             ? FileImage(_image!)
-                            : AssetImage('assets/profile_picture.png') as ImageProvider,
+                            : const AssetImage('assets/profile_picture.png') as ImageProvider,
                       ),
                       Positioned(
                         bottom: 0,
                         right: 0,
                         child: Container(
-                          padding: EdgeInsets.all(4),
+                          padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
                             color: Colors.pink[300],
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.edit, color: Colors.white, size: 20),
+                          child: const Icon(Icons.edit, color: Colors.white, size: 20),
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 _buildTextField(
                   controller: _nameController,
                   label: 'Name',
@@ -107,7 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildTextField(
                   controller: _emailController,
                   label: 'Email',
@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _buildTextField(
                   controller: _phoneController,
                   label: 'Phone Number',
@@ -137,17 +137,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: _saveChanges,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink[400],
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Save Changes',
                     style: TextStyle(fontSize: 18),
                   ),

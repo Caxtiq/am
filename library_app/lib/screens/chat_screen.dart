@@ -8,7 +8,7 @@ import 'package:library_app/models/message.dart';
 import 'package:library_app/models/user.dart';
 import 'package:library_app/providers/storage.dart';
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+  const ChatScreen({super.key});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -33,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     fetchMessages();
     _typeAnimationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 500),
     );
   }
 
@@ -89,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
       }
@@ -124,7 +124,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   Widget _buildAppBar() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -132,19 +132,19 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
       child: Row(
         children: [
           IconButton(
-            icon: Icon(Icons.arrow_back, color: Colors.pinkAccent),
+            icon: const Icon(Icons.arrow_back, color: Colors.pinkAccent),
             onPressed: () => Navigator.of(context).pop(),
           ),
           Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search users...',
                 border: InputBorder.none,
                 prefixIcon: Icon(Icons.search, color: Colors.pinkAccent),
@@ -157,11 +157,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.refresh, color: Colors.pinkAccent),
+            icon: const Icon(Icons.refresh, color: Colors.pinkAccent),
             onPressed: fetchUsers,
           ),
           IconButton(
-            icon: Icon(Icons.connect_without_contact, color: Colors.pinkAccent),
+            icon: const Icon(Icons.connect_without_contact, color: Colors.pinkAccent),
             onPressed: _connectToUser,
           ),
         ],
@@ -173,7 +173,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
     return ListView.builder(
       controller: _scrollController,
       itemCount: messages.length,
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       itemBuilder: (context, index) {
         final Message message = messages[index];
         final bool isMe = message.senderId == Storage().user.id;
@@ -191,11 +191,11 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
               );
     return Padding(
-      padding: EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: ChatBubble(
         clipper: ChatBubbleClipper6(type: isMe ? BubbleType.sendBubble : BubbleType.receiverBubble),
         alignment: isMe ? Alignment.topRight : Alignment.topLeft,
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         backGroundColor: isMe ? Colors.pinkAccent : Colors.white,
         child: Container(
           constraints: BoxConstraints(
@@ -205,12 +205,12 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               text,
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 message.content,
                 style: TextStyle(color: isMe ? Colors.white : Colors.black87),
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 DateFormat('HH:mm').format(DateTime.now()), // Replace with actual timestamp
                 style: TextStyle(
@@ -227,7 +227,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
 
   Widget _buildMessageInput() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -235,7 +235,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
             blurRadius: 5,
-            offset: Offset(0, -3),
+            offset: const Offset(0, -3),
           ),
         ],
       ),
@@ -252,7 +252,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
                 ),
                 filled: true,
                 fillColor: Colors.grey[200],
-                contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
               onChanged: (value) {
                 if (value.isNotEmpty) {
@@ -263,7 +263,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               },
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           AnimatedBuilder(
             animation: _typeAnimationController,
             builder: (context, child) {
@@ -273,7 +273,7 @@ class _ChatScreenState extends State<ChatScreen> with TickerProviderStateMixin {
               );
             },
             child: IconButton(
-              icon: Icon(Icons.send, color: Colors.pinkAccent),
+              icon: const Icon(Icons.send, color: Colors.pinkAccent),
               onPressed: _sendMessage,
             ),
           ),

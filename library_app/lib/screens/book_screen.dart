@@ -6,11 +6,12 @@ import 'package:http/http.dart' as http;
 import 'package:library_app/models/book.dart';
 import 'package:library_app/models/user.dart';
 import 'package:library_app/providers/storage.dart';
+import 'package:library_app/screens/book_editor.dart';
 import 'package:library_app/screens/information_screen.dart';
 
 class BookScreen extends StatefulWidget {
   final User currentUser;
-  const BookScreen({Key? key, required this.currentUser}) : super(key: key);
+  const BookScreen({super.key, required this.currentUser});
 
   @override
   _BookScreenState createState() => _BookScreenState();
@@ -104,10 +105,12 @@ class _BookScreenState extends State<BookScreen> {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text('Library Books',
-                  style: TextStyle(color: Colors.white, shadows: [
-                    Shadow(color: Colors.black.withOpacity(0.3), blurRadius: 2)
-                  ])),
+              title: Text(
+                'Library Books',
+                style: TextStyle(color: Colors.white, shadows: [
+                  Shadow(color: Colors.black.withOpacity(0.3), blurRadius: 2)
+                ]),
+              ),
               background: Image.network(
                 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
                 fit: BoxFit.cover,
@@ -119,23 +122,52 @@ class _BookScreenState extends State<BookScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search by title or author',
-                      prefixIcon: Icon(Icons.search, color: Colors.pinkAccent),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.pinkAccent),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
-                        borderSide: BorderSide(color: Colors.pinkAccent, width: 2),
+                  Row(children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Search by title or author',
+                          prefixIcon:
+                              const Icon(Icons.search, color: Colors.pinkAccent),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(color: Colors.pinkAccent),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                            borderSide: const BorderSide(
+                              color: Colors.pinkAccent,
+                              width: 2,
+                            ),
+                          ),
+                        ),
+                        onChanged: (value) => filterBooks(),
                       ),
                     ),
-                    onChanged: (value) => filterBooks(),
-                  ),
-                  SizedBox(height: 16),
+                    if (Storage().user.isAdmin) ...[
+                      const VerticalDivider(width: 4, color: Colors.transparent),
+                      IconButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => BookEditor(
+                              book: Book(
+                                id: 0,
+                                title: "",
+                                author: "",
+                                status: "",
+                              ),
+                            ),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.pinkAccent,
+                        ),
+                      ),
+                    ],
+                  ]),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -146,8 +178,9 @@ class _BookScreenState extends State<BookScreen> {
                           sortBooks();
                         });
                       }),
-                      _buildDropdown('Filter', filterOption,
-                          ['All', 'Title', 'Author'], (newValue) {
+                      _buildDropdown(
+                          'Filter', filterOption, ['All', 'Title', 'Author'],
+                          (newValue) {
                         setState(() {
                           filterOption = newValue!;
                           filterBooks();
@@ -167,19 +200,19 @@ class _BookScreenState extends State<BookScreen> {
             ),
           ),
           isLoading
-              ? SliverFillRemaining(
+              ? const SliverFillRemaining(
                   child: Center(
                     child: CircularProgressIndicator(color: Colors.pinkAccent),
                   ),
                 )
               : filteredBooks.isEmpty
-                  ? SliverFillRemaining(
+                  ? const SliverFillRemaining(
                       child: Center(child: Text('No books available')),
                     )
                   : SliverPadding(
-                      padding: EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(16.0),
                       sliver: SliverAnimatedGrid(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 16.0,
                           mainAxisSpacing: 16.0,
@@ -208,7 +241,7 @@ class _BookScreenState extends State<BookScreen> {
   Widget _buildDropdown(String label, String value, List<String> items,
       void Function(String?) onChanged) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.pinkAccent),
@@ -217,14 +250,14 @@ class _BookScreenState extends State<BookScreen> {
         child: DropdownButton<String>(
           value: value,
           onChanged: onChanged,
-          items: items.map<DropdownMenuItem<String>>((String value) {
+          items: items.map((String value) {
             return DropdownMenuItem<String>(
               value: value,
               child: Text(value),
             );
           }).toList(),
-          style: TextStyle(color: Colors.pinkAccent),
-          icon: Icon(Icons.arrow_drop_down, color: Colors.pinkAccent),
+          style: const TextStyle(color: Colors.pinkAccent),
+          icon: const Icon(Icons.arrow_drop_down, color: Colors.pinkAccent),
         ),
       ),
     );
@@ -232,14 +265,12 @@ class _BookScreenState extends State<BookScreen> {
 
   Widget _buildBookCard(Book book) {
     return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) =>
-                InformationScreen(book: book, currentUser: widget.currentUser),
-          ),
-        );
-      },
+      onTap: () => Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => InformationScreen(
+          book: book,
+          currentUser: widget.currentUser,
+        ),
+      )),
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -259,7 +290,7 @@ class _BookScreenState extends State<BookScreen> {
               children: [
                 Text(
                   book.title ?? 'Unknown Title',
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     color: Colors.pinkAccent,
@@ -267,14 +298,14 @@ class _BookScreenState extends State<BookScreen> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Text(
                   'By ${book.author ?? 'Unknown Author'}',
                   style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                Spacer(),
+                const Spacer(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -291,8 +322,9 @@ class _BookScreenState extends State<BookScreen> {
                       book.status == 'Available'
                           ? Icons.check_circle
                           : Icons.cancel,
-                      color:
-                          book.status == 'Available' ? Colors.green : Colors.red,
+                      color: book.status == 'Available'
+                          ? Colors.green
+                          : Colors.red,
                     ),
                   ],
                 ),

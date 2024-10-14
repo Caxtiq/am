@@ -31,4 +31,12 @@ class Book {
       status: status ?? this.status,
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'author': author,
+      'status': status,
+    };
+  }
 }
