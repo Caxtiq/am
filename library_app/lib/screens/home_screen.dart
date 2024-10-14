@@ -7,17 +7,15 @@ import 'package:library_app/screens/chat_screen.dart';
 import 'package:library_app/screens/setting_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  final String username;
   final User currentUser;
-  final User admin;
 
-  HomeScreen({required this.username, required this.currentUser, required this.admin});
+  const HomeScreen({super.key, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: const Text('Home'),
         backgroundColor: Colors.pinkAccent,
       ),
       drawer: Drawer(
@@ -25,57 +23,48 @@ class HomeScreen extends StatelessWidget {
           padding: EdgeInsets.zero,
           children: <Widget>[
             DrawerHeader(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.pinkAccent,
               ),
               child: Text(
-                'Hello, $username',
-                style: TextStyle(
+                'Hello, ${currentUser.username}',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 24,
                 ),
               ),
             ),
             ListTile(
-              leading: Icon(Icons.book),
-              title: Text('Book'),
+              leading: const Icon(Icons.book),
+              title: const Text('Book'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => BookScreen(currentUser: currentUser,)));
               },
             ),
             ListTile(
-              leading: Icon(Icons.assignment_return),
-              title: Text('Borrow'),
+              leading: const Icon(Icons.assignment_return),
+              title: const Text('Borrow'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => BorrowScreen(
-                    book: Book(
-                        title: 'title', author: 'author', status: 'available'),
-                    admin: User(
-                        id: 10,
-                        username: 'admin',
-                        email: 'admin@example.com',
-                        isAdmin: true),
-                    currentUser: currentUser,
-                  ),
+                  builder: (context) => BorrowScreen(),
                 ));
               },
             ),
             ListTile(
-              leading: Icon(Icons.chat),
-              title: Text('Chat'),
+              leading: const Icon(Icons.chat),
+              title: const Text('Chat'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatScreen()));
+                    builder: (context) => const ChatScreen()));
               },
             ),
             ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Setting'),
+              leading: const Icon(Icons.settings),
+              title: const Text('Setting'),
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => SettingScreen()));
+                    builder: (context) => const SettingScreen()));
               },
             ),
           ],
@@ -88,24 +77,24 @@ class HomeScreen extends StatelessWidget {
             CircleAvatar(
               radius: 50,
               child: Text(
-                username[0].toUpperCase(),
-                style: TextStyle(fontSize: 40),
+                currentUser.username[0].toUpperCase(),
+                style: const TextStyle(fontSize: 40),
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
-              username,
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              currentUser.username,
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
-              child: Text('Start Reading'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pinkAccent,
               ),
+              child: const Text('Start Reading'),
             ),
           ],
         ),

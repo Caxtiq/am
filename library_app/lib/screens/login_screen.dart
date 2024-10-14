@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:library_app/models/user.dart';
-import 'package:library_app/models/user_data.dart';
+import 'package:library_app/providers/storage.dart';
+import 'package:library_app/screens/register_screen.dart';
 
 import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -31,38 +34,49 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response.statusCode == 200) {
       final responseData = json.decode(response.body);
       final String token = responseData['token'];
-      final String username = _usernameController.text;
 
-      final userData = json.decode((await http.get(
-              Uri.parse('http://localhost:8080/api/users/currentUser'),
-              headers: {'Authorization': 'Bearer $token'},
-            ))
-          .body);
-
-      User currentUser = User.fromJson(userData); 
-      UserData().updateUser(currentUser, token);
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) =>
-              HomeScreen(username: username, currentUser: currentUser,admin:User(id: 1, username: 'assmin', email: 'assmin', isAdmin: true) ),
-        ),
-      );
+      await getUserdataAndRedirect(token);
     } else {
       final responseData = json.decode(response.body);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(responseData['message'] ?? 'Login failed')),
+        SnackBar(content: Text(responseData['message'] ?? 'Login failed')),
       );
     }
+  }
+
+  Future<void> getUserdataAndRedirect(String token) async {
+    final userData = json.decode((await http.get(
+      Uri.parse('http://localhost:8080/api/users/currentUser'),
+      headers: {'Authorization': 'Bearer $token'},
+    ))
+        .body);
+
+    User currentUser = User.fromJson(userData);
+    Storage().initUser(currentUser, token);
+
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => HomeScreen(currentUser: currentUser),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (Storage().isUserInitialized) {
+        getUserdataAndRedirect(Storage().token);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
-        backgroundColor: Color.fromARGB(255, 206, 142, 180),
+        title: const Text('Login'),
+        backgroundColor: const Color.fromARGB(255, 206, 142, 180),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -70,20 +84,29 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             TextField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             TextField(
               controller: _passwordController,
-              decoration: InputDecoration(labelText: 'Password'),
+              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: login,
-              child: Text('Login'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pinkAccent,
               ),
+              child: const Text('Login'),
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => RegisterScreen()),
+                );
+              },
+              child: const Text('Don\'t have an account? Register'),
             ),
           ],
         ),

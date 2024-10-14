@@ -5,7 +5,7 @@ class ProfileScreen extends StatelessWidget {
   final String email;
   final String role;
 
-  ProfileScreen({
+  const ProfileScreen({super.key, 
     required this.username,
     required this.email,
     required this.role,
@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -1,7 +1,5 @@
 package com.example.amzinlibapp.model;
 
-import java.time.LocalDate;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,16 +23,27 @@ public class Borrow {
     @JoinColumn(name = "book_id")
     private Book book;
 
-    private LocalDate borrowDate;
-    private LocalDate returnDate;
+    private Long borrowDate;
+    private Long returnDate;
 
-    public Borrow() {}
+    private Long state = 0L;
+    // 0 is pending
+    // 1 is approved
+    // 2 is denied
 
-    public Borrow(User user, Book book, LocalDate borrowDate, LocalDate returnDate) {
+    public Borrow() {
+    }
+
+    public Borrow(User user, Book book, Long borrowDate, Long returnDate) {
+        this(user, book, borrowDate, returnDate, 0L);
+    }
+
+    public Borrow(User user, Book book, Long borrowDate, Long returnDate, Long state) {
         this.user = user;
         this.book = book;
         this.borrowDate = borrowDate;
         this.returnDate = returnDate;
+        this.state = state;
     }
 
     public Long getId() {
@@ -61,20 +70,27 @@ public class Borrow {
         this.book = book;
     }
 
-    public LocalDate getBorrowDate() {
+    public Long getBorrowDate() {
         return borrowDate;
     }
 
-    public void setBorrowDate(LocalDate borrowDate) {
+    public void setBorrowDate(Long borrowDate) {
         this.borrowDate = borrowDate;
     }
 
-    public LocalDate getReturnDate() {
+    public Long getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(LocalDate returnDate) {
+    public void setReturnDate(Long returnDate) {
         this.returnDate = returnDate;
     }
+
+    public Long getState() {
+        return state;
+    }
+
+    public void setState(Long state) {
+        this.state = state;
+    }
 }
-//

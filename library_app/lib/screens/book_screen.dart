@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:library_app/models/book.dart';
 import 'package:library_app/models/user.dart';
-import 'package:library_app/models/user_data.dart';
+import 'package:library_app/providers/storage.dart';
 
 import 'information_screen.dart';
 
 class BookScreen extends StatefulWidget {
-   final User currentUser;
-   BookScreen({required this.currentUser}); 
+  final User currentUser;
+  const BookScreen({super.key, required this.currentUser});
   @override
   _BookScreenState createState() => _BookScreenState();
 }
@@ -34,7 +34,7 @@ class _BookScreenState extends State<BookScreen> {
       final response = await http.get(
         Uri.parse('http://localhost:8080/api/books'),
         headers: {
-          'Authorization': 'Bearer ${UserData().token}',
+          'Authorization': 'Bearer ${Storage().token}',
           'Content-Type': 'application/json',
         },
       );
@@ -91,7 +91,7 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Books'),
+        title: const Text('Books'),
         backgroundColor: Colors.pinkAccent,
       ),
       body: Column(
@@ -103,7 +103,7 @@ class _BookScreenState extends State<BookScreen> {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Search by title or author',
                       prefixIcon: Icon(Icons.search),
                       border: OutlineInputBorder(),
@@ -111,7 +111,7 @@ class _BookScreenState extends State<BookScreen> {
                     onChanged: (value) => filterBooks(),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 DropdownButton<String>(
                   value: sortOption,
                   onChanged: (String? newValue) {
@@ -128,7 +128,7 @@ class _BookScreenState extends State<BookScreen> {
                     );
                   }).toList(),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 DropdownButton<String>(
                   value: filterOption,
                   onChanged: (String? newValue) {
@@ -145,7 +145,7 @@ class _BookScreenState extends State<BookScreen> {
                     );
                   }).toList(),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 DropdownButton<String>(
                   value: statusOption,
                   onChanged: (String? newValue) {
@@ -167,15 +167,15 @@ class _BookScreenState extends State<BookScreen> {
           ),
           Expanded(
             child: books.isEmpty
-                ? Center(child: Text('No books available'))
+                ? const Center(child: Text('No books available'))
                 : GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
                       childAspectRatio: 2 / 2.5,
                     ),
-                    padding: EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(8.0),
                     itemCount: filteredBooks.length,
                     itemBuilder: (context, index) {
                       final book = filteredBooks[index];
@@ -183,8 +183,8 @@ class _BookScreenState extends State<BookScreen> {
                         onTap: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  InformationScreen(book: book, currentUser: widget.currentUser),
+                              builder: (context) => InformationScreen(
+                                  book: book, currentUser: widget.currentUser),
                             ),
                           );
                         },
@@ -201,15 +201,15 @@ class _BookScreenState extends State<BookScreen> {
                               children: [
                                 Text(
                                   book.title ?? 'Unknown Title',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
                                 ),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
                                     'Author: ${book.author ?? 'Unknown Author'}'),
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
                                 Text(
                                     'Status: ${book.status ?? 'Unknown Status'}'),
                                 Align(

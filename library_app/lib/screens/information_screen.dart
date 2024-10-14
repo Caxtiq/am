@@ -5,9 +5,10 @@ import 'package:library_app/screens/borrow_screen.dart';
 
 class InformationScreen extends StatelessWidget {
   final Book book;
-  final User currentUser; 
+  final User currentUser;
 
-  InformationScreen({required this.book, required this.currentUser}); 
+  const InformationScreen(
+      {super.key, required this.book, required this.currentUser});
 
   @override
   Widget build(BuildContext context) {
@@ -23,56 +24,53 @@ class InformationScreen extends StatelessWidget {
           children: [
             Text(
               'Title: ${book.title ?? 'Unknown Title'}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Author: ${book.author ?? 'Unknown Author'}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
               ),
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Text(
               'Status: ${book.status ?? 'Unknown Status'}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
                   onPressed: () {
+                    BorrowScreen.borrow(book);
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => BorrowScreen(
-                          book: book, 
-                          admin: User(id: 10, username: 'admin', email: 'admin@example.com', isAdmin: true),
-                          currentUser: currentUser, 
-                        ),
+                        builder: (context) => BorrowScreen(),
                       ),
                     );
                   },
-                  child: Text('Borrow Now'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pinkAccent,
                   ),
+                  child: const Text('Borrow Now'),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Added to Borrow Cart')),
+                      const SnackBar(content: Text('Added to Borrow Cart')),
                     );
                   },
-                  child: Text('Add to Borrow Cart'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                   ),
+                  child: const Text('Add to Borrow Cart'),
                 ),
               ],
             ),

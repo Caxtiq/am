@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:library_app/models/message.dart';
-import 'package:library_app/models/user_data.dart';
+import 'package:library_app/models/user.dart';
+import 'package:library_app/providers/storage.dart';
 
 class ChatScreen extends StatefulWidget {
+  const ChatScreen({super.key});
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -17,6 +20,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<Message> messages = [];
   String? currentUser = 'http://127.0.0.1:8080/api/currentUser';
   String? selectedUser;
+  User? selectedUserData;
 
   @override
   void initState() {
@@ -31,7 +35,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> fetchUsers() async {
     try {
       final response = await http.get(Uri.parse(apiUrl), headers: {
-        'Authorization': 'Bearer ${UserData().token}',
+        'Authorization': 'Bearer ${Storage().token}',
       });
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
@@ -54,7 +58,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future<void> fetchMessages() async {
     try {
       final response = await http.get(Uri.parse(messagesApiUrl), headers: {
-        'Authorization': 'Bearer ${UserData().token}',
+        'Authorization': 'Bearer ${Storage().token}',
       });
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
@@ -80,9 +84,9 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat with Other Users'),
+        title: const Text('Chat with Other Users'),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(56.0),
+          preferredSize: const Size.fromHeight(56.0),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Row(
@@ -97,7 +101,8 @@ class _ChatScreenState extends State<ChatScreen> {
                         borderRadius: BorderRadius.circular(30.0),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: Icon(Icons.search, color: Colors.pinkAccent),
+                      prefixIcon:
+                          const Icon(Icons.search, color: Colors.pinkAccent),
                     ),
                     onChanged: (value) {
                       setState(() {
@@ -112,25 +117,29 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         actions: [
           IconButton(
-            icon: Icon(Icons.refresh, color: Colors.white),
+            icon: const Icon(Icons.refresh, color: Colors.white),
             onPressed: fetchUsers,
           ),
           IconButton(
-            icon: Icon(Icons.connect_without_contact, color: Colors.white),
+            icon: const Icon(
+              Icons.connect_without_contact,
+              color: Colors.white,
+            ),
             onPressed: () {
               http.get(
                 Uri.parse(
-                  "http://127.0.0.1:8080/api/users/exists/$selectedUser",
+                  "http://127.0.0.1:8080/api/users/$selectedUser",
                 ),
-                headers: {'Authorization': 'Bearer ${UserData().token}'},
+                headers: {'Authorization': 'Bearer ${Storage().token}'},
               ).then((response) {
-                if (selectedUser != null && response.body == "true") {
+                if (selectedUser != null && response.statusCode == 200) {
+                  selectedUserData = User.fromJson(json.decode(response.body));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text('Connected to $selectedUser')),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                         content:
                             Text('Please enter a valid username to connect')),
                   );
@@ -150,8 +159,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 final Message message = messages[index];
                 return ListTile(
                   title: Text('From: ${message.senderId}'),
-                  subtitle:
-                      Text('To: ${message.receiverId}\n${message.content}'),
+                  subtitle: Text(
+                    'To: ${message.receiverId}\n${message.content}',
+                  ),
                 );
               },
             ),
@@ -163,22 +173,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Enter message',
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.send, color: Colors.pinkAccent),
+                  icon: const Icon(Icons.send, color: Colors.pinkAccent),
                   onPressed: () async {
                     if (_messageController.text.isNotEmpty &&
                         selectedUser != null) {
                       final newMessage = Message(
-                        id: UserData().user!.id,
-                        senderId: UserData().user!.username,
-                        receiverId: users.indexOf(selectedUser!) + 1,
+                        id: Storage().user.id,
+                        senderId: Storage().user.id,
+                        receiverId: selectedUserData!.id,
                         content: _messageController.text,
                       );
 
@@ -187,10 +197,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           Uri.parse(messagesApiUrl),
                           headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ${UserData().token}',
+                            'Authorization': 'Bearer ${Storage().token}',
                           },
                           body: json.encode(newMessage.toJson()),
                         );
+                        print(response.body);
                         if (response.statusCode == 200 ||
                             response.statusCode == 201) {
                           setState(() {

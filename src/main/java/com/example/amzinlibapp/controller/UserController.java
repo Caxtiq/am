@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.amzinlibapp.model.User;
 import com.example.amzinlibapp.repository.UserRepository;
 
-
 @RestController
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
@@ -31,22 +30,29 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/{username}")
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+            User userData = user.get();
+            return ResponseEntity.ok(new User() {
+                {
+                    setId(userData.getId());
+                    setUsername(userData.getUsername());
+                    setEmail(userData.getEmail());
+                    setIsAdmin(userData.getIsAdmin());
+                }
+            });
         } else {
             return ResponseEntity.notFound().build();
         }
     }
-    
+
     @GetMapping("/exists/{username}")
-    public ResponseEntity<Boolean> userExists(@PathVariable String username) {
+    public ResponseEntity<Long> userExists(@PathVariable String username) {
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok(user.get().getId());
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -54,7 +60,8 @@ public class UserController {
 
     @GetMapping("/currentUser")
     public ResponseEntity<User> getMethodName() {
-        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        org.springframework.security.core.Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
         String username = authentication.getName();
         Optional<User> user = userRepository.findByUsername(username);
         if (user.isPresent()) {
@@ -63,7 +70,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
     }
-    
 
     @GetMapping("/admin/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")

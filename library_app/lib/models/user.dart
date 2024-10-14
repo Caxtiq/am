@@ -16,7 +16,7 @@ class User {
       id: json['id'],
       username: json['username'],
       email: json['email'],
-      isAdmin: json['is_admin'] ?? false,
+      isAdmin: json['isAdmin'] ?? false,
     );
   }
 }

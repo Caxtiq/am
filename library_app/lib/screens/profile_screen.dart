@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
+
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
@@ -25,7 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: const Text('Profile'),
         backgroundColor: Colors.pinkAccent,
       ),
       body: Padding(
@@ -37,50 +39,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: _pickImage,
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: _image != null ? FileImage(_image!) : AssetImage('assets/profile_picture.png') as ImageProvider,
+                backgroundImage: _image != null ? FileImage(_image!) : const AssetImage('assets/profile_picture.png') as ImageProvider,
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Name',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your name',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Email',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your email',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               'Phone Number',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: 'Enter your phone number',
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
               },
-              child: Text('Save Changes'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.pinkAccent,
               ),
+              child: const Text('Save Changes'),
             ),
           ],
         ),
